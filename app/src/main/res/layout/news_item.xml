@@ -35,7 +35,7 @@
         android:id="@+id/item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
+        android:padding="12dp"
         android:background="@android:color/white">
 
         <TextView

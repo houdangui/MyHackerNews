@@ -67,11 +67,12 @@ public class HackerNewsApi {
             @Override
             public void onResponse(String response) {
                 Utils.DebugLog(TAG, "<- fetchStoryDetail response: " + response);
+                boolean isToFetchParent = false;
                 //parse the response
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String type = jsonObject.getString("type");
-                    if (type.equals("story")) {
+                    if (type.equals("story") || type.equals("job") || type.equals("poll")) {
                         String by = jsonObject.optString("by", "");
                         Integer descendants = jsonObject.optInt("descendants", 0);
                         Long id = jsonObject.getLong("id");
@@ -105,16 +106,23 @@ public class HackerNewsApi {
                         story.setText(text);
 
                         listener.onActionSuccess(story);
-                    } else if (type.equals("comment")) {
-                        Long parent = jsonObject.getLong("parent");
-                        story.setId(parent);
-                        story.setUrl("");
-                        listener.onActionSuccess(story);
+                    } else if (type.equals("comment") || type.equals("pollopt")) {
+                        if (jsonObject.has("parent")) {
+                            Long parent = jsonObject.getLong("parent");
+                            story.setId(parent);
+                            story.setUrl("");
+                            //for triggering fetch the parent
+                            story.setStatus(ItemFetchStatus.NEVER_FETCHED);
+                            isToFetchParent = true;
+                            listener.onActionSuccess(story);
+                        }
                     }
                 } catch (JSONException e){
                     listener.onActionFail(e.getLocalizedMessage());
                 } finally {
-                    story.setStatus(ItemFetchStatus.FETCHED);
+                    if (!isToFetchParent) {
+                        story.setStatus(ItemFetchStatus.FETCHED);
+                    }
                 }
             }
         }, new Response.ErrorListener() {

@@ -71,8 +71,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             holder.mTvPoints.setText("+" + story.getScore());
             holder.mTvTitle.setText(story.getTitle());
             holder.mTvSite.setText(getDisplayUrl(story.getUrl()));
-            holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - story.getTime() * 1000) +
-                    " - " + story.getBy());
+            if (story.getTime() == null) {
+                holder.mTvTimestamp.setText(story.getBy());
+            } else {
+                holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - story.getTime() * 1000) +
+                        " - " + story.getBy());
+            }
             holder.mTvCommentNum.setText(String.valueOf(story.getDescendants()));
             holder.mIvComment.setVisibility(View.VISIBLE);
         } else {
