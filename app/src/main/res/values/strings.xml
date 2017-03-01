@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MyHackerNews</string>
     <string name="top_stories">Top Stories</string>
+    <plurals name="comment_count">
+        <item quantity="one">%d COMMENT</item>
+        <item quantity="other">%d COMMENTS</item>
+    </plurals>
+    <string name="article">ARTICLE</string>
 </resources>
