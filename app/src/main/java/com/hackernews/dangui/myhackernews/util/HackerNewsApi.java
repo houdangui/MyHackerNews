@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
 
 import org.json.JSONArray;
@@ -61,6 +62,7 @@ public class HackerNewsApi {
     public void fetchStoryDetail(Context context, final Story story, final FetchStoryDetailListener listener) {
         Utils.DebugLog(TAG, "-> fetchStoryDetail");
         String url = String.format(URL_ITEM, story.getId());
+        story.setStatus(ItemFetchStatus.FETCHING);
         HttpRequestHelper.getInstance().get(context, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -68,40 +70,58 @@ public class HackerNewsApi {
                 //parse the response
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    String by = jsonObject.getString("by");
-                    Integer descendants = jsonObject.getInt("descendants");
-                    Long id = jsonObject.getLong("id");
-                    JSONArray kidsArray = jsonObject.getJSONArray("kids");
-                    Long[] kids = new Long[kidsArray.length()];
-                    for (int i = 0; i < kidsArray.length(); i++) {
-                        Long kid = kidsArray.getLong(i);
-                        kids[i] = kid;
-                    }
-                    Integer score = jsonObject.getInt("score");
-                    Long time = jsonObject.getLong("time");
-                    String title = jsonObject.getString("title");
                     String type = jsonObject.getString("type");
-                    String url = jsonObject.getString("url");
+                    if (type.equals("story")) {
+                        String by = jsonObject.optString("by", "");
+                        Integer descendants = jsonObject.optInt("descendants", 0);
+                        Long id = jsonObject.getLong("id");
 
-                    story.setBy(by);
-                    story.setDescendants(descendants);
-                    story.setId(id);
-                    story.setKids(kids);
-                    story.setScore(score);
-                    story.setTime(time);
-                    story.setTitle(title);
-                    story.setType(type);
-                    story.setUrl(url);
+                        Long[] kids;
+                        if (jsonObject.has("kids")) {
+                            JSONArray kidsArray = jsonObject.getJSONArray("kids");
+                            kids = new Long[kidsArray.length()];
+                            for (int i = 0; i < kidsArray.length(); i++) {
+                                Long kid = kidsArray.getLong(i);
+                                kids[i] = kid;
+                            }
+                        } else {
+                            kids = new Long[0];
+                        }
+                        Integer score = jsonObject.optInt("score", 0);
+                        Long time = jsonObject.optLong("time", 0);
+                        String title = jsonObject.optString("title", "");
+                        String url = jsonObject.optString("url", "");
+                        String text = jsonObject.optString("text", "");
 
-                    listener.onActionSuccess(story);
+                        story.setBy(by);
+                        story.setDescendants(descendants);
+                        story.setId(id);
+                        story.setKids(kids);
+                        story.setScore(score);
+                        story.setTime(time);
+                        story.setTitle(title);
+                        story.setType(type);
+                        story.setUrl(url);
+                        story.setText(text);
+
+                        listener.onActionSuccess(story);
+                    } else if (type.equals("comment")) {
+                        Long parent = jsonObject.getLong("parent");
+                        story.setId(parent);
+                        story.setUrl("");
+                        listener.onActionSuccess(story);
+                    }
                 } catch (JSONException e){
                     listener.onActionFail(e.getLocalizedMessage());
+                } finally {
+                    story.setStatus(ItemFetchStatus.FETCHED);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 listener.onActionFail(error.getLocalizedMessage());
+                story.setStatus(ItemFetchStatus.FETCHED);
             }
         });
     }

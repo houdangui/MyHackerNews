@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackernews.dangui.myhackernews.R;
+import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
-import com.hackernews.dangui.myhackernews.util.HackerNewsApi;
 import com.hackernews.dangui.myhackernews.util.NewsListListener;
 import com.hackernews.dangui.myhackernews.util.TimeAgo;
 import com.hackernews.dangui.myhackernews.util.Utils;
@@ -66,25 +66,24 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Story story = mDataSet.get(position);
-        if (TextUtils.isEmpty(story.getUrl())) {
+        if (story.getStatus() == ItemFetchStatus.FETCHED) {
+            holder.mTvIndex.setText(String.valueOf(position + 1));
+            holder.mTvPoints.setText("+" + story.getScore());
+            holder.mTvTitle.setText(story.getTitle());
+            holder.mTvSite.setText(getDisplayUrl(story.getUrl()));
+            holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - story.getTime() * 1000) +
+                    " - " + story.getBy());
+            holder.mTvCommentNum.setText(String.valueOf(story.getDescendants()));
+            holder.mIvComment.setVisibility(View.VISIBLE);
+        } else {
             mListener.onEmptyStoryShown(story);
-            holder.mTvIndex.setText(String.valueOf(position));
+            holder.mTvIndex.setText(String.valueOf(position + 1));
             holder.mTvPoints.setText("...");
             holder.mTvTitle.setText("...");
             holder.mTvSite.setText("...");
             holder.mTvTimestamp.setText("...");
             holder.mTvCommentNum.setText("...");
             holder.mIvComment.setVisibility(View.INVISIBLE);
-
-        } else {
-            holder.mTvIndex.setText(String.valueOf(position));
-            holder.mTvPoints.setText("+ " + story.getScore());
-            holder.mTvTitle.setText(story.getTitle());
-            holder.mTvSite.setText(getDisplayUrl(story.getUrl()));
-            holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - story.getTime()) +
-                    " - " + story.getBy());
-            holder.mTvCommentNum.setText(String.valueOf(story.getDescendants()));
-            holder.mIvComment.setVisibility(View.VISIBLE);
         }
         holder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +100,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
     private String getDisplayUrl(String url) {
         String displayUrl = url;
+        if (TextUtils.isEmpty(url)) {
+            url = "https://news.ycombinator.com";
+        }
         try {
             String domain = Utils.getDomainName(url);
             displayUrl = domain;

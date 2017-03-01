@@ -16,13 +16,16 @@ public class Story {
     private String title;
     private String type;
     private String url;
+    private String text;
+    private ItemFetchStatus status;
 
     public Story(Long id) {
         this.id = id;
+        status = ItemFetchStatus.NEVER_FETCHED;
     }
 
     public Story(String by, Integer descendants, Long id, Long[] kids, Integer score, Long time,
-                 String title, String type, String url) {
+                 String title, String type, String url, String text) {
         this.by = by;
         this.descendants = descendants;
         this.id = id;
@@ -32,6 +35,7 @@ public class Story {
         this.title = title;
         this.type = type;
         this.url = url;
+        this.text = text;
     }
 
     public String getBy() {
@@ -105,19 +109,22 @@ public class Story {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public ItemFetchStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ItemFetchStatus status) {
+        this.status = status;
+    }
+
 }
 
-
-/*
-{
-  "by" : "dhouston",
-  "descendants" : 71,
-  "id" : 8863,
-  "kids" : [ 8952, 9224, 8917, 8884, 8887, 8943, 8869, 8958, 9005, 9671, 8940, 9067, 8908, 9055, 8865, 8881, 8872, 8873, 8955, 10403, 8903, 8928, 9125, 8998, 8901, 8902, 8907, 8894, 8878, 8870, 8980, 8934, 8876 ],
-  "score" : 111,
-  "time" : 1175714200,
-  "title" : "My YC app: Dropbox - Throw away your USB drive",
-  "type" : "story",
-  "url" : "http://www.getdropbox.com/u/2/screencast.html"
-}
- */

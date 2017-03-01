@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.hackernews.dangui.myhackernews.R;
+import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
 import com.hackernews.dangui.myhackernews.util.FetchStoryDetailListener;
 import com.hackernews.dangui.myhackernews.util.FetchTopStoriesListener;
@@ -77,17 +78,19 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
 
     @Override
     public void onEmptyStoryShown(Story story) {
-        HackerNewsApi.getInstance().fetchStoryDetail(this, story, new FetchStoryDetailListener() {
-            @Override
-            public void onActionSuccess(Story story) {
-                mAdapter.notifyDataSetChanged();
-            }
+        if (story.getStatus() == ItemFetchStatus.NEVER_FETCHED) {
+            HackerNewsApi.getInstance().fetchStoryDetail(this, story, new FetchStoryDetailListener() {
+                @Override
+                public void onActionSuccess(Story story) {
+                    mAdapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onActionFail(String errorMessage) {
-
-            }
-        });
+                @Override
+                public void onActionFail(String errorMessage) {
+                    Toast.makeText(NewsListActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @Override
