@@ -7,6 +7,7 @@ import com.hackernews.dangui.myhackernews.model.Story;
  */
 
 public interface NewsListListener {
-    public void onEmptyStoryShown(Story story);
-    public void onStoryClicked(Story story);
+    void onEmptyStoryShown(Story story);
+    void onStoryClicked(Story story);
+    void onOpenBrowser(Story story);
 }

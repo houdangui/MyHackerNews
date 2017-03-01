@@ -1,5 +1,7 @@
 package com.hackernews.dangui.myhackernews.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -39,14 +41,16 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
         mTopStories = new ArrayList<>();
         mAdapter = new NewsListAdapter(mTopStories, this);
         mNewsList.setAdapter(mAdapter);
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        fetchTopStories();
+
+        getSupportActionBar().setTitle(getString(R.string.top_stories));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        mSwipeRefreshLayout.setRefreshing(true);
-        fetchTopStories();
     }
 
     @Override
@@ -99,6 +103,13 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
 
     }
 
+    @Override
+    public void onOpenBrowser(Story story) {
+        String url = story.getUrl();
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+    }
+
     private boolean isToRefresh = false;
 
     private void refreshListDelay() {
@@ -112,6 +123,6 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
                 mAdapter.notifyDataSetChanged();
                 isToRefresh = false;
             }
-        }, 500);
+        }, 300);
     }
 }

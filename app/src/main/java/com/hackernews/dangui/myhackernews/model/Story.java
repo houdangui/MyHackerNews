@@ -21,6 +21,15 @@ public class Story {
 
     public Story(Long id) {
         this.id = id;
+        this.by = "";
+        this.descendants = 0;
+        this.kids = new Long[0];
+        this.score = 0;
+        this.time = 0L;
+        this.title = "";
+        this.type = "";
+        this.url = "";
+        this.text = "";
         status = ItemFetchStatus.NEVER_FETCHED;
     }
 
@@ -36,6 +45,7 @@ public class Story {
         this.type = type;
         this.url = url;
         this.text = text;
+        status = ItemFetchStatus.NEVER_FETCHED;
     }
 
     public String getBy() {

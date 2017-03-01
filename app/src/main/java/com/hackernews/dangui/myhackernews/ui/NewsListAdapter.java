@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         public TextView mTvTimestamp;
         public TextView mTvCommentNum;
         public ImageView mIvComment;
+        public ImageButton mBtnOpenBrowser;
         
         public ViewHolder(View v) {
             super(v);
@@ -46,6 +48,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             mTvTimestamp = (TextView) v.findViewById(R.id.timestamp);
             mTvCommentNum = (TextView) v.findViewById(R.id.comment_num);
             mIvComment = (ImageView) v.findViewById(R.id.comment_icon);
+            mBtnOpenBrowser = (ImageButton) v.findViewById(R.id.open_browser);
         }
     }
 
@@ -79,6 +82,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             }
             holder.mTvCommentNum.setText(String.valueOf(story.getDescendants()));
             holder.mIvComment.setVisibility(View.VISIBLE);
+            holder.mBtnOpenBrowser.setVisibility(View.VISIBLE);
         } else {
             mListener.onEmptyStoryShown(story);
             holder.mTvIndex.setText(String.valueOf(position + 1));
@@ -88,11 +92,19 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             holder.mTvTimestamp.setText("...");
             holder.mTvCommentNum.setText("...");
             holder.mIvComment.setVisibility(View.INVISIBLE);
+            holder.mBtnOpenBrowser.setVisibility(View.INVISIBLE);
         }
         holder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onStoryClicked(story);
+            }
+        });
+
+        holder.mBtnOpenBrowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onOpenBrowser(story);
             }
         });
     }

@@ -100,6 +100,17 @@
                 android:text=""/>
         </LinearLayout>
 
+        <ImageButton
+            android:id="@+id/open_browser"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="4dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/comment_container"
+            android:src="@drawable/open_browser"
+            android:background="@null"
+            android:scaleType="fitXY"/>
+
     </RelativeLayout>
 
 
