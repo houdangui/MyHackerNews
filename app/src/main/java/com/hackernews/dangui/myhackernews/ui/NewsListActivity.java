@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.Story;
+import com.hackernews.dangui.myhackernews.util.FetchTopStoriesListener;
 import com.hackernews.dangui.myhackernews.util.HackerNewsApi;
 
 import java.util.ArrayList;
@@ -36,16 +38,38 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        fetchTopStories();
+    }
+
+    @Override
     public void onRefresh() {
-
+        fetchTopStories();
     }
 
-    private void onItemsLoadComplete() {
-        // Update the adapter and notify data set changed
+    private void fetchTopStories() {
+        HackerNewsApi.getInstance().fetchTopStories(this, new FetchTopStoriesListener() {
+            @Override
+            public void onActionSuccess(Long[] ids) {
+                mTopStories.clear();
 
-        // Stop refresh animation
-        mSwipeRefreshLayout.setRefreshing(false);
+                for (int i = 0; i < ids.length; i++) {
+                    Long id = ids[i];
+                    Story story = new Story(id);
+                    mTopStories.add(story);
+                    mAdapter.notifyDataSetChanged();
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onActionFail(String errorMessage) {
+                Toast.makeText(NewsListActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
-
-    //HackerNewsApi.getInstance().fetchTopStories(this);
 }

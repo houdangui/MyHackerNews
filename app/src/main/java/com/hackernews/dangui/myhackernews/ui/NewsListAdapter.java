@@ -58,14 +58,19 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Story story = mDataSet.get(position);
-        holder.mTvIndex.setText(position);
-        holder.mTvPoints.setText("+ " + story.getScore());
-        holder.mTvTitle.setText(story.getTitle());
-        holder.mTvSite.setText(getDisplayUrl(story.getUrl()));
-        holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - story.getTime()) +
-                " - " + story.getBy());
-        holder.mTvCommentNum.setText(story.getDescendants());
-        holder.mIvComment.setVisibility(View.VISIBLE);
+        if (TextUtils.isEmpty(story.getUrl())) {
+            // fetch the story info
+
+        } else {
+            holder.mTvIndex.setText(position);
+            holder.mTvPoints.setText("+ " + story.getScore());
+            holder.mTvTitle.setText(story.getTitle());
+            holder.mTvSite.setText(getDisplayUrl(story.getUrl()));
+            holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - story.getTime()) +
+                    " - " + story.getBy());
+            holder.mTvCommentNum.setText(story.getDescendants());
+            holder.mIvComment.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

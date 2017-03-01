@@ -17,6 +17,10 @@ public class Story {
     private String type;
     private String url;
 
+    public Story(Long id) {
+        this.id = id;
+    }
+
     public String getBy() {
         return by;
     }

@@ -5,7 +5,7 @@
     android:background="@color/orange_light">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
             android:textSize="@dimen/text_size_small"
-            android:text=""/>
+            android:text="..."/>
 
 
         <LinearLayout
