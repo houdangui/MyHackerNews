@@ -82,7 +82,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             }
             holder.mTvCommentNum.setText(String.valueOf(story.getDescendants()));
             holder.mIvComment.setVisibility(View.VISIBLE);
-            holder.mBtnOpenBrowser.setVisibility(View.VISIBLE);
+            holder.mBtnOpenBrowser.setVisibility(TextUtils.isEmpty(story.getUrl()) ? View.INVISIBLE : View.VISIBLE);
         } else {
             mListener.onEmptyStoryShown(story);
             holder.mTvIndex.setText(String.valueOf(position + 1));

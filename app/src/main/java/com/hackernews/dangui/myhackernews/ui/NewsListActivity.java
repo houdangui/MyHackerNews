@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.hackernews.dangui.myhackernews.R;
@@ -106,7 +107,8 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     public void onOpenBrowser(Story story) {
         String url = story.getUrl();
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                TextUtils.isEmpty(url) ? Uri.parse("about:blank") : Uri.parse(url));
         startActivity(browserIntent);
     }
 
