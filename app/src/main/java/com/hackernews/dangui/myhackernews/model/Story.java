@@ -9,10 +9,10 @@ import java.util.ArrayList;
 public class Story {
     private String by;
     private Integer descendants;
-    private Integer id;
-    private ArrayList<Integer> kids;
+    private Long id;
+    private ArrayList<Long> kids;
     private Integer score;
-    private Integer time;
+    private Long time;
     private String title;
     private String type;
     private String url;
@@ -33,19 +33,19 @@ public class Story {
         this.descendants = descendants;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public ArrayList<Integer> getKids() {
+    public ArrayList<Long> getKids() {
         return kids;
     }
 
-    public void setKids(ArrayList<Integer> kids) {
+    public void setKids(ArrayList<Long> kids) {
         this.kids = kids;
     }
 
@@ -57,11 +57,11 @@ public class Story {
         this.score = score;
     }
 
-    public Integer getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(Integer time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
