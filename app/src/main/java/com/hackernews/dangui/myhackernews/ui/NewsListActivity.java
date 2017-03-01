@@ -1,5 +1,6 @@
 package com.hackernews.dangui.myhackernews.ui;
 
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -82,7 +83,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
             HackerNewsApi.getInstance().fetchStoryDetail(this, story, new FetchStoryDetailListener() {
                 @Override
                 public void onActionSuccess(Story story) {
-                    mAdapter.notifyDataSetChanged();
+                    refreshListDelay();
                 }
 
                 @Override
@@ -96,5 +97,21 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     public void onStoryClicked(Story story) {
 
+    }
+
+    private boolean isToRefresh = false;
+
+    private void refreshListDelay() {
+        if (isToRefresh) {
+            return;
+        }
+        isToRefresh = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+                isToRefresh = false;
+            }
+        }, 500);
     }
 }
