@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/orange_light">
 
     <LinearLayout
+        android:id="@+id/index_container"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:paddingLeft="12dp"
@@ -35,6 +36,7 @@
         android:id="@+id/item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/index_container"
         android:padding="12dp"
         android:background="@android:color/white">
 
@@ -113,5 +115,11 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#fcf5ed"
+        android:layout_alignParentBottom="true">
+    </View>
 
-</LinearLayout>
+</RelativeLayout>
