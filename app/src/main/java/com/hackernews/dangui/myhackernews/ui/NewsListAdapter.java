@@ -10,8 +10,12 @@ import android.widget.TextView;
 
 import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.Story;
+import com.hackernews.dangui.myhackernews.util.HackerNewsApi;
+import com.hackernews.dangui.myhackernews.util.NewsListListener;
 import com.hackernews.dangui.myhackernews.util.TimeAgo;
+import com.hackernews.dangui.myhackernews.util.Utils;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
@@ -20,8 +24,10 @@ import java.util.ArrayList;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
     private ArrayList<Story> mDataSet;
+    private NewsListListener mListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public View mRootView;
         public TextView mTvIndex;
         public TextView mTvPoints;
         public TextView mTvTitle;
@@ -32,6 +38,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         
         public ViewHolder(View v) {
             super(v);
+            mRootView = v;
             mTvIndex = (TextView) v.findViewById(R.id.index);
             mTvPoints = (TextView) v.findViewById(R.id.points);
             mTvTitle = (TextView) v.findViewById(R.id.title);
@@ -42,8 +49,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         }
     }
 
-    public NewsListAdapter(ArrayList<Story> stories) {
+    public NewsListAdapter(ArrayList<Story> stories, NewsListListener listener) {
         mDataSet = stories;
+        mListener = listener;
     }
 
     @Override
@@ -57,20 +65,33 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Story story = mDataSet.get(position);
+        final Story story = mDataSet.get(position);
         if (TextUtils.isEmpty(story.getUrl())) {
-            // fetch the story info
+            mListener.onEmptyStoryShown(story);
+            holder.mTvIndex.setText(String.valueOf(position));
+            holder.mTvPoints.setText("...");
+            holder.mTvTitle.setText("...");
+            holder.mTvSite.setText("...");
+            holder.mTvTimestamp.setText("...");
+            holder.mTvCommentNum.setText("...");
+            holder.mIvComment.setVisibility(View.INVISIBLE);
 
         } else {
-            holder.mTvIndex.setText(position);
+            holder.mTvIndex.setText(String.valueOf(position));
             holder.mTvPoints.setText("+ " + story.getScore());
             holder.mTvTitle.setText(story.getTitle());
             holder.mTvSite.setText(getDisplayUrl(story.getUrl()));
             holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - story.getTime()) +
                     " - " + story.getBy());
-            holder.mTvCommentNum.setText(story.getDescendants());
+            holder.mTvCommentNum.setText(String.valueOf(story.getDescendants()));
             holder.mIvComment.setVisibility(View.VISIBLE);
         }
+        holder.mRootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onStoryClicked(story);
+            }
+        });
     }
 
     @Override
@@ -79,18 +100,14 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     }
 
     private String getDisplayUrl(String url) {
-        String site = "";
-        if (TextUtils.isEmpty(url)) {
-            return site;
+        String displayUrl = url;
+        try {
+            String domain = Utils.getDomainName(url);
+            displayUrl = domain;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
 
-        int index = url.indexOf('/');
-        if (index > 0) {
-            site = url.substring(0, index);
-        } else {
-            site = url;
-        }
-
-        return site;
+        return displayUrl;
     }
 }

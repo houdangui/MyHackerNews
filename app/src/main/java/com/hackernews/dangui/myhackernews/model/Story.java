@@ -10,7 +10,7 @@ public class Story {
     private String by;
     private Integer descendants;
     private Long id;
-    private ArrayList<Long> kids;
+    private Long[] kids;
     private Integer score;
     private Long time;
     private String title;
@@ -19,6 +19,19 @@ public class Story {
 
     public Story(Long id) {
         this.id = id;
+    }
+
+    public Story(String by, Integer descendants, Long id, Long[] kids, Integer score, Long time,
+                 String title, String type, String url) {
+        this.by = by;
+        this.descendants = descendants;
+        this.id = id;
+        this.kids = kids;
+        this.score = score;
+        this.time = time;
+        this.title = title;
+        this.type = type;
+        this.url = url;
     }
 
     public String getBy() {
@@ -45,11 +58,11 @@ public class Story {
         this.id = id;
     }
 
-    public ArrayList<Long> getKids() {
+    public Long[] getKids() {
         return kids;
     }
 
-    public void setKids(ArrayList<Long> kids) {
+    public void setKids(Long[] kids) {
         this.kids = kids;
     }
 

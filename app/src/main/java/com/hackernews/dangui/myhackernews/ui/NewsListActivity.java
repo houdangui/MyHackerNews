@@ -9,12 +9,14 @@ import android.widget.Toast;
 
 import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.Story;
+import com.hackernews.dangui.myhackernews.util.FetchStoryDetailListener;
 import com.hackernews.dangui.myhackernews.util.FetchTopStoriesListener;
 import com.hackernews.dangui.myhackernews.util.HackerNewsApi;
+import com.hackernews.dangui.myhackernews.util.NewsListListener;
 
 import java.util.ArrayList;
 
-public class NewsListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class NewsListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, NewsListListener {
     private ArrayList<Story> mTopStories;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mNewsList;
@@ -33,7 +35,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
         mLayoutManager = new LinearLayoutManager(this);
         mNewsList.setLayoutManager(mLayoutManager);
         mTopStories = new ArrayList<>();
-        mAdapter = new NewsListAdapter(mTopStories);
+        mAdapter = new NewsListAdapter(mTopStories, this);
         mNewsList.setAdapter(mAdapter);
     }
 
@@ -71,5 +73,25 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onEmptyStoryShown(Story story) {
+        HackerNewsApi.getInstance().fetchStoryDetail(this, story, new FetchStoryDetailListener() {
+            @Override
+            public void onActionSuccess(Story story) {
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onActionFail(String errorMessage) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onStoryClicked(Story story) {
+
     }
 }
