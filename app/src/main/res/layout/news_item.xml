@@ -1,6 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/orange_light">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/index"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="..."
+            android:textSize="@dimen/tex_size_medium"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="..."
+            android:textSize="@dimen/text_size_small"
+            android:textColor="@color/gray"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/tex_size_medium"
+            android:textColor="@color/black"
+            android:text="..."/>
+
+        <TextView
+            android:id="@+id/site_url"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/comment_container"
+            android:layout_below="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_small"
+            android:text="..."/>
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_below="@+id/site_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_small"
+            android:text=""/>
+
+
+        <LinearLayout
+            android:id="@+id/comment_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/title"
+            android:orientation="horizontal"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="6dp">
+
+            <ImageView
+                android:id="@+id/comment_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/comment"
+                android:visibility="invisible"/>
+
+            <TextView
+                android:id="@+id/comment_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:textColor="@color/orange_dark"
+                android:textSize="@dimen/text_size_small"
+                android:layout_gravity="center_vertical"
+                android:text=""/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
 
 </LinearLayout>
