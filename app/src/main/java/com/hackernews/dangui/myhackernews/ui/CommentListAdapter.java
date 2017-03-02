@@ -1,17 +1,16 @@
 package com.hackernews.dangui.myhackernews.ui;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.Comment;
 import com.hackernews.dangui.myhackernews.model.Story;
 import com.hackernews.dangui.myhackernews.util.CommentsListListener;
-import com.hackernews.dangui.myhackernews.util.NewsListListener;
+import com.hackernews.dangui.myhackernews.util.TimeAgo;
 
 import java.util.ArrayList;
 
@@ -25,26 +24,14 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View mRootView;
-        public TextView mTvIndex;
-        public TextView mTvPoints;
-        public TextView mTvTitle;
-        public TextView mTvSite;
         public TextView mTvTimestamp;
-        public TextView mTvCommentNum;
-        public ImageView mIvComment;
-        public ImageButton mBtnOpenBrowser;
+        public TextView mTvCommentContent;
 
         public ViewHolder(View v) {
             super(v);
             mRootView = v;
-            mTvIndex = (TextView) v.findViewById(R.id.index);
-            mTvPoints = (TextView) v.findViewById(R.id.points);
-            mTvTitle = (TextView) v.findViewById(R.id.title);
-            mTvSite = (TextView) v.findViewById(R.id.site_url);
             mTvTimestamp = (TextView) v.findViewById(R.id.timestamp);
-            mTvCommentNum = (TextView) v.findViewById(R.id.comment_num);
-            mIvComment = (ImageView) v.findViewById(R.id.comment_icon);
-            mBtnOpenBrowser = (ImageButton) v.findViewById(R.id.open_browser);
+            mTvCommentContent = (TextView) v.findViewById(R.id.content);
         }
     }
 
@@ -55,12 +42,22 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
     @Override
     public CommentListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View v =  LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_comments, parent, false);
+        CommentListAdapter.ViewHolder vh = new CommentListAdapter.ViewHolder(v);
+        return vh;
     }
 
     @Override
     public void onBindViewHolder(CommentListAdapter.ViewHolder holder, int position) {
-
+        Comment comment = mDataSet.get(position);
+        if (comment.getTime() == null) {
+            holder.mTvTimestamp.setText(comment.getBy());
+        } else {
+            holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - comment.getTime() * 1000) +
+                    " - " + comment.getBy());
+        }
+        holder.mTvCommentContent.setText(comment.getText());
     }
 
     @Override

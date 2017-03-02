@@ -8,12 +8,24 @@ import java.util.ArrayList;
 
 public class Comment {
     private String by;
-    private Integer id;
-    private ArrayList<Integer> kids;
-    private Integer parent;
+    private Long id;
+    private Long[] kids;
+    private Long parent;
     private String text;
-    private Integer time;
+    private Long time;
     private String type;
+    private ItemFetchStatus status;
+
+    public Comment(Long id) {
+        this.id = id;
+        this.by = "";
+        this.kids = new Long[0];
+        this.time = 0L;
+        this.parent = 0L;
+        this.type = "";
+        this.text = "";
+        status = ItemFetchStatus.NEVER_FETCHED;
+    }
 
     public String getBy() {
         return by;
@@ -23,27 +35,27 @@ public class Comment {
         this.by = by;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public ArrayList<Integer> getKids() {
+    public Long[] getKids() {
         return kids;
     }
 
-    public void setKids(ArrayList<Integer> kids) {
+    public void setKids(Long[] kids) {
         this.kids = kids;
     }
 
-    public Integer getParent() {
+    public Long getParent() {
         return parent;
     }
 
-    public void setParent(Integer parent) {
+    public void setParent(Long parent) {
         this.parent = parent;
     }
 
@@ -55,11 +67,11 @@ public class Comment {
         this.text = text;
     }
 
-    public Integer getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(Integer time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
