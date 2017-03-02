@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 /**
  * Created by dangui on 1/3/17.
@@ -33,4 +34,25 @@ public class Utils {
         }
         return result;
     }
+
+    public static String longArrayToString(Long[] array) {
+        String res = Arrays.toString(array);
+        return res;
+    }
+
+    public static Long[] stringToLongArray(String arr) {
+        String[] items = arr.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+
+        Long[] results = new Long[items.length];
+
+        for (int i = 0; i < items.length; i++) {
+            try {
+                results[i] = Long.parseLong(items[i]);
+            } catch (NumberFormatException nfe) {
+                //NOTE: write something here if you need to recover from formatting errors
+            };
+        }
+        return results;
+    }
+
 }
