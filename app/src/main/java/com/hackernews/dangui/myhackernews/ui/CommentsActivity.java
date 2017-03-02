@@ -35,7 +35,30 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment_list);
 
+        Story story = getStory();
+        mCommentList = (RecyclerView) findViewById(R.id.comment_list);
+        mLayoutManager = new LinearLayoutManager(this);
+        mCommentList.setLayoutManager(mLayoutManager);
+        mAdapter = new CommentListAdapter(this, mComments, story, this);
+        mCommentList.setAdapter(mAdapter);
+    }
+
+    private Story getStory() {
         Intent intent = getIntent();
+        Long storyId = intent.getLongExtra("storyId", 0L);
+        String url = intent.getStringExtra("url");
+        String title = intent.getStringExtra("title");
+        Long ts = intent.getLongExtra("timestamp", 0L);
+        String by = intent.getStringExtra("by");
+        int descendants = intent.getIntExtra("descendants", 0);
+
+        Story story = new Story(storyId);
+        story.setUrl(url);
+        story.setTitle(title);
+        story.setTime(ts);
+        story.setBy(by);
+        story.setDescendants(descendants);
+
         mComments = new ArrayList<>();
         Long[] kids = (Long[]) intent.getSerializableExtra("kids");
         if (kids != null) {
@@ -43,13 +66,12 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
                 Comment comment = new Comment(kid);
                 mComments.add(comment);
             }
+        } else {
+            kids = new Long[0];
         }
+        story.setKids(kids);
 
-        mCommentList = (RecyclerView) findViewById(R.id.comment_list);
-        mLayoutManager = new LinearLayoutManager(this);
-        mCommentList.setLayoutManager(mLayoutManager);
-        mAdapter = new CommentListAdapter(mComments, this);
-        mCommentList.setAdapter(mAdapter);
+        return story;
     }
 
     @Override

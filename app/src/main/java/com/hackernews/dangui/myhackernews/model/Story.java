@@ -135,6 +135,5 @@ public class Story {
     public void setStatus(ItemFetchStatus status) {
         this.status = status;
     }
-
 }
 
