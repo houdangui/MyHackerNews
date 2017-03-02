@@ -3,10 +3,13 @@ package com.hackernews.dangui.myhackernews.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,11 +23,17 @@ import java.util.List;
  */
 
 public class NewsDetailActivity extends AppCompatActivity {
+    String mUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
+
+        mUrl = getIntent().getStringExtra("url");
+        if (mUrl == null) {
+            mUrl = "";
+        }
 
         // Adding Toolbar to Main screen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -35,14 +44,23 @@ public class NewsDetailActivity extends AppCompatActivity {
         // Set Tabs inside Toolbar
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
     }
 
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         String commentTitle = getResources().getQuantityString(R.plurals.comment_count, 0, 0);
+
+        //add article fragments
+        ArticleFragment articleFragment = new ArticleFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("url", mUrl);
+        articleFragment.setArguments(bundle);
+        adapter.addFragment(articleFragment, getString(R.string.article));
+
+        //add comments fragments
         adapter.addFragment(new CommentsFragment(), commentTitle);
-        adapter.addFragment(new ArticleFragment(), getString(R.string.article));
         viewPager.setAdapter(adapter);
     }
 

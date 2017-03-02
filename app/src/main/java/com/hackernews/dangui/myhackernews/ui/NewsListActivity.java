@@ -104,6 +104,8 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
         if (story.getStatus() == ItemFetchStatus.FETCHED) {
             Intent intent = new Intent(this, NewsDetailActivity.class);
             intent.putExtra("storyId", story.getId());
+            intent.putExtra("url", story.getUrl() == null ? "" : story.getUrl());
+            intent.putExtra("title", story.getTitle());
             startActivity(intent);
         }
     }
