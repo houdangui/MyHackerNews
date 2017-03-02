@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.hackernews.dangui.myhackernews.model.Comment;
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
 
@@ -77,7 +78,7 @@ public class HackerNewsApi {
                         Integer descendants = jsonObject.optInt("descendants", 0);
                         Long id = jsonObject.getLong("id");
 
-                        Long[] kids;
+                        Long[] kids = new Long[0];
                         if (jsonObject.has("kids")) {
                             JSONArray kidsArray = jsonObject.getJSONArray("kids");
                             kids = new Long[kidsArray.length()];
@@ -85,8 +86,6 @@ public class HackerNewsApi {
                                 Long kid = kidsArray.getLong(i);
                                 kids[i] = kid;
                             }
-                        } else {
-                            kids = new Long[0];
                         }
                         Integer score = jsonObject.optInt("score", 0);
                         Long time = jsonObject.optLong("time", 0);
@@ -130,6 +129,63 @@ public class HackerNewsApi {
             public void onErrorResponse(VolleyError error) {
                 listener.onActionFail(error.getLocalizedMessage());
                 story.setStatus(ItemFetchStatus.FETCHED);
+            }
+        });
+    }
+
+    public void fetchCommentDetail(Context context, final Comment comment, final FetchCommentDetailListener listener) {
+        Utils.DebugLog(TAG, "-> fetchCommentDetail");
+        String url = String.format(URL_ITEM, comment.getId());
+        comment.setStatus(ItemFetchStatus.FETCHING);
+        HttpRequestHelper.getInstance().get(context, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Utils.DebugLog(TAG, "<- fetchCommentDetail response: " + response);
+                //parse the response
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String type = jsonObject.getString("type");
+                    if (type.equals("comment")) {
+                        String by = jsonObject.optString("by", "");
+                        Long id = jsonObject.getLong("id");
+
+                        Long[] kids;
+                        if (jsonObject.has("kids")) {
+                            JSONArray kidsArray = jsonObject.getJSONArray("kids");
+                            kids = new Long[kidsArray.length()];
+                            for (int i = 0; i < kidsArray.length(); i++) {
+                                Long kid = kidsArray.getLong(i);
+                                kids[i] = kid;
+                            }
+                        } else {
+                            kids = new Long[0];
+                        }
+                        Long time = jsonObject.optLong("time", 0);
+                        String text = jsonObject.optString("text", "");
+                        Long parent = jsonObject.getLong("parent");
+
+                        comment.setBy(by);
+                        comment.setId(id);
+                        comment.setKids(kids);
+                        comment.setTime(time);
+                        comment.setType(type);
+                        comment.setText(text);
+                        comment.setParent(parent);
+                        listener.onActionSuccess(comment);
+                    } else {
+                        listener.onActionFail("Not an comment");
+                    }
+                } catch (JSONException e){
+                    listener.onActionFail(e.getLocalizedMessage());
+                } finally {
+                    comment.setStatus(ItemFetchStatus.FETCHED);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onActionFail(error.getLocalizedMessage());
+                comment.setStatus(ItemFetchStatus.FETCHED);
             }
         });
     }

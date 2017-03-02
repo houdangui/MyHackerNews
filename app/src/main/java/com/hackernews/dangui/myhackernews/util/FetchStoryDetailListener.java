@@ -7,6 +7,6 @@ import com.hackernews.dangui.myhackernews.model.Story;
  */
 
 public interface FetchStoryDetailListener {
-    public void onActionSuccess(Story story);
-    public void onActionFail(String errorMessage);
+    void onActionSuccess(Story story);
+    void onActionFail(String errorMessage);
 }

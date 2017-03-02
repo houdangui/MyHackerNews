@@ -82,6 +82,14 @@ public class Comment {
     public void setType(String type) {
         this.type = type;
     }
+
+    public ItemFetchStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ItemFetchStatus status) {
+        this.status = status;
+    }
 }
 
 /*

@@ -1,6 +1,7 @@
 package com.hackernews.dangui.myhackernews.ui;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,11 @@ import android.widget.TextView;
 
 import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.Comment;
+import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
 import com.hackernews.dangui.myhackernews.util.CommentsListListener;
 import com.hackernews.dangui.myhackernews.util.TimeAgo;
+import com.hackernews.dangui.myhackernews.util.Utils;
 
 import java.util.ArrayList;
 
@@ -51,17 +54,23 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     @Override
     public void onBindViewHolder(CommentListAdapter.ViewHolder holder, int position) {
         Comment comment = mDataSet.get(position);
-        if (comment.getTime() == null) {
-            holder.mTvTimestamp.setText(comment.getBy());
+        if (comment.getStatus() == ItemFetchStatus.FETCHED) {
+            if (comment.getTime() == null) {
+                holder.mTvTimestamp.setText(comment.getBy());
+            } else {
+                holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - comment.getTime() * 1000) +
+                        " - " + comment.getBy());
+            }
+            holder.mTvCommentContent.setText(Utils.fromHtml(comment.getText()));
         } else {
-            holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - comment.getTime() * 1000) +
-                    " - " + comment.getBy());
+            mListener.onEmptyCommentShown(comment);
+            holder.mTvTimestamp.setText("...");
+            holder.mTvCommentContent.setText("...");
         }
-        holder.mTvCommentContent.setText(comment.getText());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mDataSet.size();
     }
 }
