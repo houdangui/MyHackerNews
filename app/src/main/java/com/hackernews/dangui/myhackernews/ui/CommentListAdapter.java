@@ -104,9 +104,14 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     holder.mTvTimestamp.setText(comment.getBy());
                 } else {
                     holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - comment.getTime() * 1000) +
-                            " - " + comment.getBy());
+                                " - " + comment.getBy());
                 }
-                holder.mTvCommentContent.setText(Utils.fromHtml(comment.getText()));
+
+                if (comment.isDeleted()) {
+                    holder.mTvCommentContent.setText(mContext.getString(R.string.comment_deleted));
+                } else {
+                    holder.mTvCommentContent.setText(Utils.fromHtml(comment.getText()));
+                }
             } else {
                 mListener.onEmptyCommentShown(comment);
                 holder.mTvTimestamp.setText("...");

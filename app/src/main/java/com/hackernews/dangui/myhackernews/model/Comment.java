@@ -14,6 +14,7 @@ public class Comment {
     private String text;
     private Long time;
     private String type;
+    private boolean deleted;
     private ItemFetchStatus status;
     private Comment latestReply;
 
@@ -25,7 +26,6 @@ public class Comment {
         this.parent = 0L;
         this.type = "";
         this.text = "";
-        status = ItemFetchStatus.NEVER_FETCHED;
     }
 
     public String getBy() {
@@ -117,7 +117,16 @@ public class Comment {
         }
         return id;
     }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }
+
 
 /*
 {

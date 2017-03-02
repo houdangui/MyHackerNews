@@ -17,11 +17,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.NewsDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
         <activity android:name=".ui.CommentsActivity"
             android:screenOrientation="portrait">
         </activity>

@@ -68,6 +68,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
                 for (int i = 0; i < ids.length; i++) {
                     Long id = ids[i];
                     Story story = new Story(id);
+                    story.setStatus(ItemFetchStatus.NEVER_FETCHED);
                     mTopStories.add(story);
                     mAdapter.notifyDataSetChanged();
                 }

@@ -30,7 +30,6 @@ public class Story {
         this.type = "";
         this.url = "";
         this.text = "";
-        status = ItemFetchStatus.NEVER_FETCHED;
     }
 
     public Story(String by, Integer descendants, Long id, Long[] kids, Integer score, Long time,
@@ -45,7 +44,6 @@ public class Story {
         this.type = type;
         this.url = url;
         this.text = text;
-        status = ItemFetchStatus.NEVER_FETCHED;
     }
 
     public String getBy() {

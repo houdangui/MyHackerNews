@@ -99,6 +99,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
         if (kids != null) {
             for (Long kid : kids) {
                 Comment comment = new Comment(kid);
+                comment.setStatus(ItemFetchStatus.NEVER_FETCHED);
                 mComments.add(comment);
             }
         } else {
@@ -133,6 +134,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
         Long id = comment.getLastestReplyId();
         if (id != null) {
             final Comment reply = new Comment(id);
+            reply.setStatus(ItemFetchStatus.NEVER_FETCHED);
             HackerNewsApi.getInstance().fetchCommentDetail(this, reply, new FetchCommentDetailListener() {
                 @Override
                 public void onActionSuccess(Comment fetchedReply) {

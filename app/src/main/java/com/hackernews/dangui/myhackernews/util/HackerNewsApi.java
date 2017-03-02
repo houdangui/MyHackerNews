@@ -163,6 +163,7 @@ public class HackerNewsApi {
                         Long time = jsonObject.optLong("time", 0);
                         String text = jsonObject.optString("text", "");
                         Long parent = jsonObject.getLong("parent");
+                        boolean deleted = jsonObject.optBoolean("deleted", false);
 
                         comment.setBy(by);
                         comment.setId(id);
@@ -171,6 +172,7 @@ public class HackerNewsApi {
                         comment.setType(type);
                         comment.setText(text);
                         comment.setParent(parent);
+                        comment.setDeleted(deleted);
                         listener.onActionSuccess(comment);
                     } else {
                         listener.onActionFail("Not an comment");
