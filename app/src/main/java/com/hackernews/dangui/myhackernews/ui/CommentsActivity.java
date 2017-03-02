@@ -59,11 +59,33 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
                 @Override
                 public void onActionSuccess(Comment comment) {
                     refreshListDelay();
+                    if (comment.shouldFetchLatestReply()) {
+                        fetchLatestReply(comment);
+                    }
                 }
 
                 @Override
                 public void onActionFail(String errorMessage) {
                     Toast.makeText(CommentsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    private void fetchLatestReply(final Comment comment) {
+        Long id = comment.getLastestReplyId();
+        if (id != null) {
+            final Comment reply = new Comment(id);
+            HackerNewsApi.getInstance().fetchCommentDetail(this, reply, new FetchCommentDetailListener() {
+                @Override
+                public void onActionSuccess(Comment fetchedReply) {
+                    comment.setLatestReply(fetchedReply);
+                    refreshListDelay();
+                }
+
+                @Override
+                public void onActionFail(String errorMessage) {
+
                 }
             });
         }

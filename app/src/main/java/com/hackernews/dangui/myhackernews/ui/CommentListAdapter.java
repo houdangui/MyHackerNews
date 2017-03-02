@@ -29,12 +29,16 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
         public View mRootView;
         public TextView mTvTimestamp;
         public TextView mTvCommentContent;
+        public TextView mTvReplyTimestamp;
+        public TextView mTvReplyContent;
 
         public ViewHolder(View v) {
             super(v);
             mRootView = v;
             mTvTimestamp = (TextView) v.findViewById(R.id.timestamp);
             mTvCommentContent = (TextView) v.findViewById(R.id.content);
+            mTvReplyTimestamp = (TextView) v.findViewById(R.id.reply_timestamp);
+            mTvReplyContent = (TextView) v.findViewById(R.id.reply_content);
         }
     }
 
@@ -66,6 +70,27 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
             mListener.onEmptyCommentShown(comment);
             holder.mTvTimestamp.setText("...");
             holder.mTvCommentContent.setText("...");
+        }
+        //latest reply of this comment
+        Comment reply = comment.getLatestReply();
+        if (reply == null) {
+            holder.mTvReplyTimestamp.setVisibility(View.GONE);
+            holder.mTvReplyContent.setVisibility(View.GONE);
+        } else {
+            if (reply.getStatus() == ItemFetchStatus.FETCHED) {
+                if (reply.getTime() == null) {
+                    holder.mTvReplyTimestamp.setText(reply.getBy());
+                } else {
+                    holder.mTvReplyTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - reply.getTime() * 1000) +
+                            " - " + reply.getBy());
+                }
+                holder.mTvReplyContent.setText(Utils.fromHtml(reply.getText()));
+            } else {
+                holder.mTvReplyTimestamp.setText("...");
+                holder.mTvReplyContent.setText("...");
+            }
+            holder.mTvReplyTimestamp.setVisibility(View.VISIBLE);
+            holder.mTvReplyContent.setVisibility(View.VISIBLE);
         }
     }
 

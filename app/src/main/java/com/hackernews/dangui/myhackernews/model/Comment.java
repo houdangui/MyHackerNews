@@ -15,6 +15,7 @@ public class Comment {
     private Long time;
     private String type;
     private ItemFetchStatus status;
+    private Comment latestReply;
 
     public Comment(Long id) {
         this.id = id;
@@ -89,6 +90,32 @@ public class Comment {
 
     public void setStatus(ItemFetchStatus status) {
         this.status = status;
+    }
+
+    public Comment getLatestReply() {
+        return latestReply;
+    }
+
+    public void setLatestReply(Comment latestReply) {
+        this.latestReply = latestReply;
+    }
+
+    public boolean shouldFetchLatestReply() {
+        if (kids != null && kids.length >= 1) {
+            if (latestReply == null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Long getLastestReplyId() {
+        Long id = null;
+        if (kids != null && kids.length >= 1) {
+            id = kids[0];
+        }
+        return id;
     }
 }
 
