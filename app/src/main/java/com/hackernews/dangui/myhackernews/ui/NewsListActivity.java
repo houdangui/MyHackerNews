@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.hackernews.dangui.myhackernews.R;
+import com.hackernews.dangui.myhackernews.database.DatabaseHelper;
+import com.hackernews.dangui.myhackernews.database.StoryDBHelper;
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
 import com.hackernews.dangui.myhackernews.api.FetchStoryDetailListener;
@@ -39,7 +41,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
         mNewsList = (RecyclerView) findViewById(R.id.news_list);
         mLayoutManager = new LinearLayoutManager(this);
         mNewsList.setLayoutManager(mLayoutManager);
-        mTopStories = new ArrayList<>();
+        mTopStories = StoryDBHelper.getInstance().loadStories(this);
         mAdapter = new NewsListAdapter(mTopStories, this);
         mNewsList.setAdapter(mAdapter);
 
@@ -64,12 +66,14 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
             @Override
             public void onActionSuccess(Long[] ids) {
                 mTopStories.clear();
+                StoryDBHelper.getInstance().clearCache(NewsListActivity.this);
 
                 for (int i = 0; i < ids.length; i++) {
                     Long id = ids[i];
                     Story story = new Story(id);
                     story.setStatus(ItemFetchStatus.NEVER_FETCHED);
                     mTopStories.add(story);
+                    StoryDBHelper.getInstance().insertStory(NewsListActivity.this, story);
                     mAdapter.notifyDataSetChanged();
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -89,6 +93,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
             HackerNewsApi.getInstance().fetchStoryDetail(this, story, new FetchStoryDetailListener() {
                 @Override
                 public void onActionSuccess(Story story) {
+                    StoryDBHelper.getInstance().updateStory(NewsListActivity.this, story);
                     refreshListDelay();
                 }
 

@@ -19,5 +19,7 @@ public class Constants {
         public final static String type = "type";
         public final static String url = "url";
         public final static String text = "text";
+        public final static String fetched = "fetched";
+
     }
 }

@@ -60,7 +60,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + Constants.StoryTableColumn.title + " varchar, "
             + Constants.StoryTableColumn.type + " varchar, "
             + Constants.StoryTableColumn.url + " varchar, "
-            + Constants.StoryTableColumn.text + " varchar); ";
+            + Constants.StoryTableColumn.text + " varchar, "
+            + Constants.StoryTableColumn.fetched + " integer" +
+            "); ";
 
     @Override
     public synchronized void onCreate(SQLiteDatabase db) {

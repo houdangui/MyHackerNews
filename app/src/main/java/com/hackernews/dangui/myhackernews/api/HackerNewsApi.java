@@ -103,6 +103,7 @@ public class HackerNewsApi {
                         story.setUrl(url);
                         story.setText(text);
 
+                        story.setStatus(ItemFetchStatus.FETCHED);
                         listener.onActionSuccess(story);
                     } else if (type.equals("comment") || type.equals("pollopt")) {
                         if (jsonObject.has("parent")) {

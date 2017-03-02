@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 
+import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
 import com.hackernews.dangui.myhackernews.util.Constants;
 import com.hackernews.dangui.myhackernews.util.Utils;
@@ -26,18 +27,6 @@ public class StoryDBHelper {
     private StoryDBHelper() {
     }
 
-    /*
-    private String by;
-    private Integer descendants;
-    private Long id;
-    private Long[] kids;
-    private Integer score;
-    private Long time;
-    private String title;
-    private String type;
-    private String url;
-    private String text;
-     */
     public void insertStory(Context context, Story story) {
         SQLiteDatabase db = DatabaseHelper.getInstance(context).openDatabase();
 
@@ -52,6 +41,7 @@ public class StoryDBHelper {
         values.put(Constants.StoryTableColumn.type, story.getType());
         values.put(Constants.StoryTableColumn.url, story.getUrl());
         values.put(Constants.StoryTableColumn.text, story.getText());
+        values.put(Constants.StoryTableColumn.fetched, story.getStatus() == ItemFetchStatus.FETCHED ? 1 : 0);
 
         long id = -1;
         try {
@@ -104,6 +94,7 @@ public class StoryDBHelper {
         String type = cursor.getString(cursor.getColumnIndexOrThrow(Constants.StoryTableColumn.type));
         String url = cursor.getString(cursor.getColumnIndexOrThrow(Constants.StoryTableColumn.url));
         String text = cursor.getString(cursor.getColumnIndexOrThrow(Constants.StoryTableColumn.text));
+        Integer fetched = cursor.getInt(cursor.getColumnIndexOrThrow(Constants.StoryTableColumn.fetched));
 
         Story story = new Story(id);
         story.setBy(by);
@@ -115,6 +106,7 @@ public class StoryDBHelper {
         story.setType(type);
         story.setUrl(url);
         story.setText(text);
+        story.setStatus(fetched == 1 ? ItemFetchStatus.FETCHED : ItemFetchStatus.NEVER_FETCHED);
 
         return story;
     }
@@ -132,14 +124,15 @@ public class StoryDBHelper {
         values.put(Constants.StoryTableColumn.type, story.getType());
         values.put(Constants.StoryTableColumn.url, story.getUrl());
         values.put(Constants.StoryTableColumn.text, story.getText());
+        values.put(Constants.StoryTableColumn.fetched, story.getStatus() == ItemFetchStatus.FETCHED ? 1 : 0);
 
         int id = -1;
-        try{
+        try {
             id = db.update(Constants.STORY_TB, values, Constants.StoryTableColumn.id + "=?",
                     new String[]{"" + story.getId()});
-        }catch(SQLiteException e){
+        } catch (SQLiteException e){
             e.printStackTrace();
-        }finally {
+        } finally {
             if (db != null){
                 DatabaseHelper.getInstance(context).closeDatabase();
             }
@@ -147,13 +140,13 @@ public class StoryDBHelper {
         return id;
     }
 
-    public static void clearCache(Context context){
+    public void clearCache(Context context){
         SQLiteDatabase db = DatabaseHelper.getInstance(context).openDatabase();
         try {
             db.delete(Constants.STORY_TB, null, null);
-        }catch (SQLiteException e){
+        } catch (SQLiteException e){
             e.printStackTrace();
-        }finally {
+        } finally {
             if (db != null){
                 DatabaseHelper.getInstance(context).closeDatabase();
             }
