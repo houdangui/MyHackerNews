@@ -29,6 +29,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
     private RecyclerView mNewsList;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private static int CACHE_LIMIT = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +74,14 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
                     Story story = new Story(id);
                     story.setStatus(ItemFetchStatus.NEVER_FETCHED);
                     mTopStories.add(story);
-                    StoryDBHelper.getInstance().insertStory(NewsListActivity.this, story);
+                    if (i < CACHE_LIMIT) {
+                        StoryDBHelper.getInstance().insertStory(NewsListActivity.this, story);
+                    }
                     mAdapter.notifyDataSetChanged();
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
+
+
             }
 
             @Override
