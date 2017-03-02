@@ -110,6 +110,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
             intent.putExtra("by", story.getBy());
             intent.putExtra("kids", story.getKids());
             intent.putExtra("descendants", story.getDescendants().intValue());
+            intent.putExtra("type", story.getType());
             startActivity(intent);
         }
     }

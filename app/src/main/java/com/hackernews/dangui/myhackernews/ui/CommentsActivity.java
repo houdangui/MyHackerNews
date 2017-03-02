@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.hackernews.dangui.myhackernews.R;
@@ -41,8 +42,40 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
         mCommentList.setLayoutManager(mLayoutManager);
         mAdapter = new CommentListAdapter(this, mComments, story, this);
         mCommentList.setAdapter(mAdapter);
+
+        getSupportActionBar().setTitle(getTitle(story));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private String getTitle(Story story) {
+        String type  = story.getType();
+        if (type == null) {
+            return "";
+        }
+        if (type.equals("story")) {
+            return getString(R.string.story);
+        } else if (type.equals("job")) {
+            return getString(R.string.job);
+        } else if (type.equals("poll")) {
+            return getString(R.string.poll);
+        } else {
+            return "";
+        }
+
+    }
     private Story getStory() {
         Intent intent = getIntent();
         Long storyId = intent.getLongExtra("storyId", 0L);
@@ -51,6 +84,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
         Long ts = intent.getLongExtra("timestamp", 0L);
         String by = intent.getStringExtra("by");
         int descendants = intent.getIntExtra("descendants", 0);
+        String type = intent.getStringExtra("type");
 
         Story story = new Story(storyId);
         story.setUrl(url);
@@ -58,6 +92,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
         story.setTime(ts);
         story.setBy(by);
         story.setDescendants(descendants);
+        story.setType(type);
 
         mComments = new ArrayList<>();
         Long[] kids = (Long[]) intent.getSerializableExtra("kids");

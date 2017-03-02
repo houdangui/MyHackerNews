@@ -45,7 +45,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 

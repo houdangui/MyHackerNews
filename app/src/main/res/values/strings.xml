@@ -6,4 +6,7 @@
         <item quantity="other">%d COMMENTS</item>
     </plurals>
     <string name="article">ARTICLE</string>
+    <string name="story">Story</string>
+    <string name="job">Job</string>
+    <string name="poll">Poll</string>
 </resources>
