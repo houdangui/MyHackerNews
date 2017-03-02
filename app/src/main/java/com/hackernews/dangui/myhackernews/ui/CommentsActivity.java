@@ -14,10 +14,9 @@ import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.Comment;
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
-import com.hackernews.dangui.myhackernews.util.CommentsListListener;
-import com.hackernews.dangui.myhackernews.util.FetchCommentDetailListener;
-import com.hackernews.dangui.myhackernews.util.FetchStoryDetailListener;
-import com.hackernews.dangui.myhackernews.util.HackerNewsApi;
+import com.hackernews.dangui.myhackernews.api.CommentsListListener;
+import com.hackernews.dangui.myhackernews.api.FetchCommentDetailListener;
+import com.hackernews.dangui.myhackernews.api.HackerNewsApi;
 
 import java.util.ArrayList;
 

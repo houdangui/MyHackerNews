@@ -1,14 +1,13 @@
-package com.hackernews.dangui.myhackernews.util;
+package com.hackernews.dangui.myhackernews.api;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.hackernews.dangui.myhackernews.model.Comment;
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
+import com.hackernews.dangui.myhackernews.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

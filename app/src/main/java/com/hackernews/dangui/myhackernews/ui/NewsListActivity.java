@@ -14,10 +14,10 @@ import android.widget.Toast;
 import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
-import com.hackernews.dangui.myhackernews.util.FetchStoryDetailListener;
-import com.hackernews.dangui.myhackernews.util.FetchTopStoriesListener;
-import com.hackernews.dangui.myhackernews.util.HackerNewsApi;
-import com.hackernews.dangui.myhackernews.util.NewsListListener;
+import com.hackernews.dangui.myhackernews.api.FetchStoryDetailListener;
+import com.hackernews.dangui.myhackernews.api.FetchTopStoriesListener;
+import com.hackernews.dangui.myhackernews.api.HackerNewsApi;
+import com.hackernews.dangui.myhackernews.api.NewsListListener;
 
 import java.util.ArrayList;
 

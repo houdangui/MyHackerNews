@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.hackernews.dangui.myhackernews.R;
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
-import com.hackernews.dangui.myhackernews.util.NewsListListener;
+import com.hackernews.dangui.myhackernews.api.NewsListListener;
 import com.hackernews.dangui.myhackernews.util.TimeAgo;
 import com.hackernews.dangui.myhackernews.util.Utils;
 

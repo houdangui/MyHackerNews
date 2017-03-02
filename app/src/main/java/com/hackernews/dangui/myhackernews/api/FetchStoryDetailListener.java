@@ -1,4 +1,4 @@
-package com.hackernews.dangui.myhackernews.util;
+package com.hackernews.dangui.myhackernews.api;
 
 import com.hackernews.dangui.myhackernews.model.Story;
 
