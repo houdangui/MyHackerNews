@@ -60,8 +60,8 @@ public class HackerNewsApi {
     }
 
     public void fetchStoryDetail(Context context, final Story story, final FetchStoryDetailListener listener) {
-        Utils.DebugLog(TAG, "-> fetchStoryDetail");
         String url = String.format(URL_ITEM, story.getId());
+        Utils.DebugLog(TAG, "-> fetchStoryDetail:" + url);
         story.setStatus(ItemFetchStatus.FETCHING);
         HttpRequestHelper.getInstance().get(context, url, new Response.Listener<String>() {
             @Override
@@ -129,8 +129,8 @@ public class HackerNewsApi {
     }
 
     public void fetchCommentDetail(Context context, final Comment comment, final FetchCommentDetailListener listener) {
-        Utils.DebugLog(TAG, "-> fetchCommentDetail");
         String url = String.format(URL_ITEM, comment.getId());
+        Utils.DebugLog(TAG, "-> fetchCommentDetail:" + url);
         comment.setStatus(ItemFetchStatus.FETCHING);
         HttpRequestHelper.getInstance().get(context, url, new Response.Listener<String>() {
             @Override

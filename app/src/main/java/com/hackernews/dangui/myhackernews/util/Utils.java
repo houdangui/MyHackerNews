@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class Utils {
 
     public static void DebugLog(String tag, String message) {
-        Log.e(tag, message);
+        Log.d(tag, message);
     }
 
     public static String getDomainName(String url) throws URISyntaxException {
