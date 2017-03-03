@@ -99,7 +99,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (viewHolder instanceof  VHItem) {
             VHItem holder = (VHItem) viewHolder;
             Comment comment = mDataSet.get(position - 1);
-            if (comment.getStatus() == ItemFetchStatus.FETCHED) {
+            if (comment.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
                 if (comment.getTime() == null) {
                     holder.mTvTimestamp.setText(comment.getBy());
                 } else {
@@ -123,7 +123,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 holder.mTvReplyTimestamp.setVisibility(View.GONE);
                 holder.mTvReplyContent.setVisibility(View.GONE);
             } else {
-                if (reply.getStatus() == ItemFetchStatus.FETCHED) {
+                if (reply.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
                     if (reply.getTime() == null) {
                         holder.mTvReplyTimestamp.setText(reply.getBy());
                     } else {

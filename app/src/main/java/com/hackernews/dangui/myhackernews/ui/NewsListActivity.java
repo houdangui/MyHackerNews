@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.hackernews.dangui.myhackernews.R;
-import com.hackernews.dangui.myhackernews.database.DatabaseHelper;
 import com.hackernews.dangui.myhackernews.database.StoryDBHelper;
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
@@ -72,7 +71,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
                 for (int i = 0; i < ids.length; i++) {
                     Long id = ids[i];
                     Story story = new Story(id);
-                    story.setStatus(ItemFetchStatus.NEVER_FETCHED);
+                    story.setStatus(ItemFetchStatus.NEVER_FETCH);
                     mTopStories.add(story);
                     if (i < CACHE_LIMIT) {
                         StoryDBHelper.getInstance().insertStory(NewsListActivity.this, story);
@@ -94,7 +93,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
 
     @Override
     public void onEmptyStoryShown(Story story) {
-        if (story.getStatus() == ItemFetchStatus.NEVER_FETCHED) {
+        if (story.getStatus() == ItemFetchStatus.NEVER_FETCH) {
             HackerNewsApi.getInstance().fetchStoryDetail(this, story, new FetchStoryDetailListener() {
                 @Override
                 public void onActionSuccess(Story story) {
@@ -112,7 +111,7 @@ public class NewsListActivity extends AppCompatActivity implements SwipeRefreshL
 
     @Override
     public void onStoryClicked(Story story) {
-        if (story.getStatus() == ItemFetchStatus.FETCHED && story.getTime() != 0L) {
+        if (story.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
             Intent intent = new Intent(this, CommentsActivity.class);
             intent.putExtra("storyId", story.getId().longValue());
             intent.putExtra("url", story.getUrl() == null ? "" : story.getUrl());

@@ -69,7 +69,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Story story = mDataSet.get(position);
-        if (story.getStatus() == ItemFetchStatus.FETCHED) {
+        if (story.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
             holder.mTvIndex.setText(String.valueOf(position + 1));
             holder.mTvPoints.setText("+" + story.getScore());
             holder.mTvTitle.setText(story.getTitle());

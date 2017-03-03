@@ -67,7 +67,6 @@ public class HackerNewsApi {
             @Override
             public void onResponse(String response) {
                 Utils.DebugLog(TAG, "<- fetchStoryDetail response: " + response);
-                boolean isToFetchParent = false;
                 //parse the response
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -103,7 +102,7 @@ public class HackerNewsApi {
                         story.setUrl(url);
                         story.setText(text);
 
-                        story.setStatus(ItemFetchStatus.FETCHED);
+                        story.setStatus(ItemFetchStatus.FETCHED_SUCCESS);
                         listener.onActionSuccess(story);
                     } else if (type.equals("comment") || type.equals("pollopt")) {
                         if (jsonObject.has("parent")) {
@@ -111,24 +110,20 @@ public class HackerNewsApi {
                             story.setId(parent);
                             story.setUrl("");
                             //for triggering fetch the parent
-                            story.setStatus(ItemFetchStatus.NEVER_FETCHED);
-                            isToFetchParent = true;
+                            story.setStatus(ItemFetchStatus.NEVER_FETCH);
                             listener.onActionSuccess(story);
                         }
                     }
                 } catch (JSONException e){
+                    story.setStatus(ItemFetchStatus.FETCHED_FAIL);
                     listener.onActionFail(e.getLocalizedMessage());
-                } finally {
-                    if (!isToFetchParent) {
-                        story.setStatus(ItemFetchStatus.FETCHED);
-                    }
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                story.setStatus(ItemFetchStatus.FETCHED_FAIL);
                 listener.onActionFail(error.getLocalizedMessage());
-                story.setStatus(ItemFetchStatus.FETCHED);
             }
         });
     }
@@ -173,21 +168,22 @@ public class HackerNewsApi {
                         comment.setText(text);
                         comment.setParent(parent);
                         comment.setDeleted(deleted);
+                        comment.setStatus(ItemFetchStatus.FETCHED_SUCCESS);
                         listener.onActionSuccess(comment);
                     } else {
+                        comment.setStatus(ItemFetchStatus.FETCHED_FAIL);
                         listener.onActionFail("Not an comment");
                     }
                 } catch (JSONException e){
+                    comment.setStatus(ItemFetchStatus.FETCHED_FAIL);
                     listener.onActionFail(e.getLocalizedMessage());
-                } finally {
-                    comment.setStatus(ItemFetchStatus.FETCHED);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                comment.setStatus(ItemFetchStatus.FETCHED_FAIL);
                 listener.onActionFail(error.getLocalizedMessage());
-                comment.setStatus(ItemFetchStatus.FETCHED);
             }
         });
     }

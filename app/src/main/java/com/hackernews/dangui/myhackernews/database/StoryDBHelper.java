@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.text.TextUtils;
 
 import com.hackernews.dangui.myhackernews.model.ItemFetchStatus;
 import com.hackernews.dangui.myhackernews.model.Story;
@@ -41,7 +40,7 @@ public class StoryDBHelper {
         values.put(Constants.StoryTableColumn.type, story.getType());
         values.put(Constants.StoryTableColumn.url, story.getUrl());
         values.put(Constants.StoryTableColumn.text, story.getText());
-        values.put(Constants.StoryTableColumn.fetched, story.getStatus() == ItemFetchStatus.FETCHED ? 1 : 0);
+        values.put(Constants.StoryTableColumn.fetched, story.getStatus() == ItemFetchStatus.FETCHED_SUCCESS ? 1 : 0);
 
         long id = -1;
         try {
@@ -106,7 +105,7 @@ public class StoryDBHelper {
         story.setType(type);
         story.setUrl(url);
         story.setText(text);
-        story.setStatus(fetched == 1 ? ItemFetchStatus.FETCHED : ItemFetchStatus.NEVER_FETCHED);
+        story.setStatus(fetched == 1 ? ItemFetchStatus.FETCHED_SUCCESS : ItemFetchStatus.NEVER_FETCH);
 
         return story;
     }
@@ -124,7 +123,7 @@ public class StoryDBHelper {
         values.put(Constants.StoryTableColumn.type, story.getType());
         values.put(Constants.StoryTableColumn.url, story.getUrl());
         values.put(Constants.StoryTableColumn.text, story.getText());
-        values.put(Constants.StoryTableColumn.fetched, story.getStatus() == ItemFetchStatus.FETCHED ? 1 : 0);
+        values.put(Constants.StoryTableColumn.fetched, story.getStatus() == ItemFetchStatus.FETCHED_SUCCESS ? 1 : 0);
 
         int id = -1;
         try {

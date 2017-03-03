@@ -5,7 +5,8 @@ package com.hackernews.dangui.myhackernews.model;
  */
 
 public enum ItemFetchStatus {
-    NEVER_FETCHED,
+    NEVER_FETCH,
     FETCHING,
-    FETCHED
+    FETCHED_SUCCESS,
+    FETCHED_FAIL
 }
