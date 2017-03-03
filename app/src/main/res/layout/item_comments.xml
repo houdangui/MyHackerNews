@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardBackgroundColor="#ffffffff"
+        android:layout_marginBottom="4dp"
         android:id="@+id/cv_comment">
 
         <LinearLayout
@@ -49,7 +50,6 @@
         android:layout_height="wrap_content"
         card_view:cardBackgroundColor="#ffffffff"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:id="@+id/cv_reply">
 
