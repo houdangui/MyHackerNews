@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="..."
-            android:textSize="@dimen/tex_size_medium"
+            android:textSize="@dimen/text_size_medium"
             android:textColor="@color/black"/>
 
         <TextView
@@ -44,7 +44,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/tex_size_medium"
+            android:textSize="@dimen/text_size_medium"
             android:textColor="@color/black"
             android:text="..."/>
 
