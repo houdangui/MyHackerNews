@@ -1,8 +1,16 @@
 package com.hackernews.dangui.myhackernews.ui;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,8 +121,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 if (comment.getTime() == null) {
                     holder.mTvTimestamp.setText(comment.getBy());
                 } else {
-                    holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - comment.getTime() * 1000) +
-                                " - " + comment.getBy());
+                    holder.mTvTimestamp.setText(formatDateString(TimeAgo.toDuration(System.currentTimeMillis() - comment.getTime() * 1000), comment.getBy()));
                 }
 
                 if (comment.isDeleted()) {
@@ -136,8 +143,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     if (reply.getTime() == null) {
                         holder.mTvReplyTimestamp.setText(reply.getBy());
                     } else {
-                        holder.mTvReplyTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - reply.getTime() * 1000) +
-                                " - " + reply.getBy());
+                        holder.mTvReplyTimestamp.setText(formatDateString(TimeAgo.toDuration(System.currentTimeMillis() - reply.getTime() * 1000), reply.getBy()));
                     }
                     holder.mTvReplyContent.setText(Utils.fromHtml(reply.getText()));
                 } else {
@@ -153,8 +159,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (mStory.getTime() == null) {
                 holder.mTvTimestamp.setText(mStory.getBy());
             } else {
-                holder.mTvTimestamp.setText(TimeAgo.toDuration(System.currentTimeMillis() - mStory.getTime() * 1000) +
-                        " - " + mStory.getBy());
+                holder.mTvTimestamp.setText(formatDateString(TimeAgo.toDuration(System.currentTimeMillis() - mStory.getTime() * 1000), mStory.getBy()));
             }
             int kidsCount = mStory.getDescendants();
             String commentTitle = mContext.getResources().getQuantityString(R.plurals.comment_count, kidsCount, kidsCount);
@@ -165,5 +170,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemCount() {
         return mDataSet.size() + 1;
+    }
+
+    private Spannable formatDateString(String time, String by) {
+        String str = time + " - " + by;
+        Spannable sb = new SpannableString(str);
+        sb.setSpan(new ForegroundColorSpan(0xffff6600), str.indexOf(by), str.indexOf(by) + by.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return sb;
     }
 }
