@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
@@ -118,11 +119,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
 
             if (comment.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
-                if (comment.getTime() == null) {
-                    holder.mTvTimestamp.setText(comment.getBy());
-                } else {
-                    holder.mTvTimestamp.setText(formatDateString(TimeAgo.toDuration(System.currentTimeMillis() - comment.getTime() * 1000), comment.getBy()));
-                }
+                setTimestampByText(holder.mTvTimestamp, comment);
 
                 if (comment.isDeleted()) {
                     holder.mTvCommentContent.setText(mContext.getString(R.string.comment_deleted));
@@ -140,12 +137,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 holder.mCvReply.setVisibility(View.GONE);
             } else {
                 if (reply.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
-                    if (reply.getTime() == null) {
-                        holder.mTvReplyTimestamp.setText(reply.getBy());
+                    setTimestampByText(holder.mTvReplyTimestamp, reply);
+                    if (reply.isDeleted()) {
+                        holder.mTvReplyContent.setText(mContext.getString(R.string.comment_deleted));
                     } else {
-                        holder.mTvReplyTimestamp.setText(formatDateString(TimeAgo.toDuration(System.currentTimeMillis() - reply.getTime() * 1000), reply.getBy()));
+                        holder.mTvReplyContent.setText(Utils.fromHtml(reply.getText()));
                     }
-                    holder.mTvReplyContent.setText(Utils.fromHtml(reply.getText()));
                 } else {
                     holder.mTvReplyTimestamp.setText("...");
                     holder.mTvReplyContent.setText("...");
@@ -178,5 +175,25 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         sb.setSpan(new ForegroundColorSpan(0xffff6600), str.indexOf(by), str.indexOf(by) + by.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return sb;
+    }
+
+    private void setTimestampByText(TextView textView, Comment comment) {
+        Long time = comment.getTime();
+        String by = comment.getBy();
+        if (time == null) {
+            if (TextUtils.isEmpty(by)) {
+                textView.setText("");
+            } else {
+                textView.setText(by);
+            }
+        } else {
+            if (TextUtils.isEmpty(by)) {
+                //for deleted comment
+                textView.setText(TimeAgo.toDuration(System.currentTimeMillis() - time * 1000));
+            } else {
+                textView.setText(formatDateString(TimeAgo.toDuration(System.currentTimeMillis() - time * 1000), by));
+            }
+        }
+
     }
 }
