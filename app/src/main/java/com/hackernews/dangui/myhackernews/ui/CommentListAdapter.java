@@ -1,6 +1,7 @@
 package com.hackernews.dangui.myhackernews.ui;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public TextView mTvCommentContent;
         public TextView mTvReplyTimestamp;
         public TextView mTvReplyContent;
+        public CardView mCvComment;
+        public CardView mCvReply;
 
         public VHItem(View v) {
             super(v);
@@ -44,6 +47,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mTvCommentContent = (TextView) v.findViewById(R.id.content);
             mTvReplyTimestamp = (TextView) v.findViewById(R.id.reply_timestamp);
             mTvReplyContent = (TextView) v.findViewById(R.id.reply_content);
+            mCvComment = (CardView) v.findViewById(R.id.cv_comment);
+            mCvReply = (CardView) v.findViewById(R.id.cv_reply);
         }
     }
 
@@ -99,6 +104,11 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (viewHolder instanceof  VHItem) {
             VHItem holder = (VHItem) viewHolder;
             Comment comment = mDataSet.get(position - 1);
+
+            if (comment.getBy().equals("hermitdev")) {
+                Utils.DebugLog("", "");
+            }
+
             if (comment.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
                 if (comment.getTime() == null) {
                     holder.mTvTimestamp.setText(comment.getBy());
@@ -120,8 +130,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             //latest reply of this comment
             Comment reply = comment.getLatestReply();
             if (reply == null) {
-                holder.mTvReplyTimestamp.setVisibility(View.GONE);
-                holder.mTvReplyContent.setVisibility(View.GONE);
+                holder.mCvReply.setVisibility(View.GONE);
             } else {
                 if (reply.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
                     if (reply.getTime() == null) {
@@ -135,8 +144,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     holder.mTvReplyTimestamp.setText("...");
                     holder.mTvReplyContent.setText("...");
                 }
-                holder.mTvReplyTimestamp.setVisibility(View.VISIBLE);
-                holder.mTvReplyContent.setVisibility(View.VISIBLE);
+                holder.mCvReply.setVisibility(View.VISIBLE);
             }
         } else if (viewHolder instanceof VHHeader) {
             VHHeader holder = (VHHeader) viewHolder;
