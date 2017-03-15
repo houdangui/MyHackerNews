@@ -65,7 +65,11 @@ public class CommentsActivity extends AppCompatActivity implements CommentsListL
             return "";
         }
         if (type.equals("story")) {
-            return getString(R.string.story);
+            if (story.getTitle().startsWith("Ask HN")) {
+                return getString(R.string.ask);
+            } else {
+                return getString(R.string.story);
+            }
         } else if (type.equals("job")) {
             return getString(R.string.job);
         } else if (type.equals("poll")) {
