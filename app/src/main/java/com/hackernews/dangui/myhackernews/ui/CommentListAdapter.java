@@ -114,10 +114,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             VHItem holder = (VHItem) viewHolder;
             Comment comment = mDataSet.get(position - 1);
 
-            if (comment.getBy().equals("hermitdev")) {
-                Utils.DebugLog("", "");
-            }
-
             if (comment.getStatus() == ItemFetchStatus.FETCHED_SUCCESS) {
                 setTimestampByText(holder.mTvTimestamp, comment);
 
